@@ -15,20 +15,15 @@ def euclidean_distance(first_row, second_row):
 def k_fold_cross_validation_split(X, k=5):
     # takes numpy array as an argument
     splitted_data = []
-    c = (100 / k) / 100
-    s = len(X) * c
-    
-    
-    for i in range(k):
-        start = int(i*s)
-        end = int((i+1)*s)
+    data_partition_num = len(X)/k
 
-        temp_data = X.copy()
+    for i in range(k):
+        start = int(i*data_partition_num)
+        end = int((i+1)*data_partition_num)
 
         test_set = X[start:end,:]
         train_set = np.concatenate((X[0:start,:],X[end:,:]), axis=0)
         
         splitted_data.append(np.array([train_set,test_set], dtype=object))
-
     
     return np.array(splitted_data)
