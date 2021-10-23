@@ -27,16 +27,16 @@ class KNN:
             indexes.append(index)
         
         
-        print("-----voting part-----")
+        #print("-----voting part-----")
         counted = list(Counter(classes).items())
-        print(classes)
-        print(counted)
-        print("distances: ", distances)
+        #print(classes)
+        #print(counted)
+        #print("distances: ", distances)
 
       
         most_common = counted[0]
         class_numbers = [i[1] for i in counted]
-        print(class_numbers)
+        #print(class_numbers)
         
         predicted_class = None
         if class_numbers.count(most_common[0]) > 1:
@@ -48,7 +48,7 @@ class KNN:
                     # the one that we are looking for
                     classes_of_duplicate_occurrences.append(cnt[0])
             
-            print(classes_of_duplicate_occurrences)
+            #print(classes_of_duplicate_occurrences)
             
             # breaking tie part
             new_distances = [[] for i in range(int(max(classes_of_duplicate_occurrences))+1)]
@@ -63,7 +63,7 @@ class KNN:
                         # storing distances to calculate sums later and decide nearest neighbour
                         new_distances[int(_class)].append(indiv_distance)
 
-            print(new_distances)
+            #print(new_distances)
 
             empty_list_indices = [i for i in range(len(new_distances)) if len(new_distances[i]) == 0]
 
@@ -71,20 +71,19 @@ class KNN:
                 new_distances[index] = sum(new_distance)
 
             new_distances = np.array(new_distances)
-            print(new_distances)
+            #print(new_distances)
             
             
-            sorted_indexes = np.argsort(new_distances)
-            print(sorted_indexes)
+            sorted_indices = np.argsort(new_distances)
+            #print(sorted_indices)
 
-            print("empty part")
-            print(empty_list_indices)
-            for empty_index in empty_list_indices:
-                sorted_indexes = np.delete(sorted_indexes, empty_index)
-            print(sorted_indexes)
+            #print("empty part")
+            #print(empty_list_indices)
+            sorted_indices = np.delete(sorted_indices, empty_list_indices)
+            #print(sorted_indices)
 
-            predicted_class = int(sorted_indexes[0])
-            print(predicted_class)
+            predicted_class = int(sorted_indices[0])
+            #print(predicted_class)
         else:
             # no tie select most common as nearest neighbour
             predicted_class = int(most_common[0])
@@ -108,15 +107,15 @@ class KNN:
         distances = [[euclidean_distance(x, self.X_train[i]), i] for i in range(len(self.X_train))]
 
         # sorting to find nearest neighbour
-        print(distances)
+        #print(distances)
         sorted_array = sorted(distances, key=lambda x :x[0])
-        print(sorted_array)
+        #print(sorted_array)
 
-        print("Asked data: ", x.astype(int))
-        print("Nearest Neighbours:")
+        #print("Asked data: ", x.astype(int))
+        #print("Nearest Neighbours:")
         for m in range(self.k):
             index = sorted_array[m][1]
-            print(self.X_train[index], ", class: " ,self.y_train[index])
+            #print(self.X_train[index], ", class: " ,self.y_train[index])
         
         predicted = self.vote(sorted_array[:self.k])
         return predicted

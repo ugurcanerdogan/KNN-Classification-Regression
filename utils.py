@@ -1,6 +1,5 @@
 import numpy as np
 from math import sqrt
-from random import shuffle
 
 def euclidean_distance(first_row, second_row):
     if len(first_row) != len(second_row):
@@ -12,12 +11,13 @@ def euclidean_distance(first_row, second_row):
         total += diff_square
     return sqrt(total)
 
-def accuracy(predicted, labels):
+def accuracy_score(predicted, labels):
     predicted = np.array(predicted)
     labels = np.array(labels)   
 
     accuracy = (predicted == labels).sum() / len(predicted)
-    print(accuracy*100)
+    #print(accuracy*100)
+    return accuracy*100
 def min_max_normalization(data):
     max_bucket = [-1000000000 for i in range(len(data[0]))]
     
@@ -50,7 +50,7 @@ def k_fold_cross_validation_split(X, k=5):
    
 
     # shuffle
-    shuffle(X)
+    np.random.shuffle(X)
     
     
     splitted_data = []
