@@ -24,12 +24,14 @@ def min_max_normalization(data):
     # working on temp data
     temp_data = data.copy()
 
+    # finding maximum
     for row in temp_data:
         for index in range(len(row)):
             column = row[index]
             if column > max_bucket[index]:
                 max_bucket[index] = column
 
+    # finding minimum
     min_bucket = max_bucket.copy()
     for row in temp_data:
         for index in range(len(row)):
@@ -37,6 +39,7 @@ def min_max_normalization(data):
             if column < min_bucket[index]:
                 min_bucket[index] = column
 
+    # normalization part
     for row_index, row in enumerate(temp_data):
         for col_index in range(len(row)):
             column = row[col_index]

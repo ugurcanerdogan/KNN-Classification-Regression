@@ -79,7 +79,14 @@ class KNN:
 
             #print("empty part")
             #print(empty_list_indices)
-            sorted_indices = np.delete(sorted_indices, empty_list_indices)
+
+            will_be_deleted_indices = []
+            for index in empty_list_indices:
+                for i, _index in enumerate(sorted_indices):
+                    if index == _index:
+                        will_be_deleted_indices.append(i)
+
+            sorted_indices = np.delete(sorted_indices, will_be_deleted_indices)
             #print(sorted_indices)
 
             predicted_class = int(sorted_indices[0])
