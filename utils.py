@@ -11,9 +11,51 @@ def euclidean_distance(first_row, second_row):
         total += diff_square
     return sqrt(total)
 
+def accuracy_score(predicted, labels):
+    predicted = np.array(predicted)
+    labels = np.array(labels)   
+
+    accuracy = (predicted == labels).sum() / len(predicted)
+    #print(accuracy*100)
+    return accuracy*100
+def min_max_normalization(data):
+    max_bucket = [-1000000000 for i in range(len(data[0]))]
+    
+    # working on temp data
+    temp_data = data.copy()
+
+    # finding maximum
+    for row in temp_data:
+        for index in range(len(row)):
+            column = row[index]
+            if column > max_bucket[index]:
+                max_bucket[index] = column
+
+    # finding minimum
+    min_bucket = max_bucket.copy()
+    for row in temp_data:
+        for index in range(len(row)):
+            column = row[index]
+            if column < min_bucket[index]:
+                min_bucket[index] = column
+
+    # normalization part
+    for row_index, row in enumerate(temp_data):
+        for col_index in range(len(row)):
+            column = row[col_index]
+            normalized_value = (column - min_bucket[col_index]) / (max_bucket[col_index] - min_bucket[col_index])
+            temp_data[row_index][col_index] = normalized_value
+
+    return temp_data
 
 def k_fold_cross_validation_split(X, k=5):
     # takes numpy array as an argument
+   
+
+    # shuffle
+    np.random.shuffle(X)
+    
+    
     splitted_data = []
     data_partition_num = len(X)/k
 
