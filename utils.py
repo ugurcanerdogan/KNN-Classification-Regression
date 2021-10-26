@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 from math import sqrt
 
@@ -19,11 +20,26 @@ def accuracy_score(predicted, labels):
     #print(accuracy*100)
     return accuracy*100
 def min_max_normalization(data):
-    max_bucket = [-1000000000 for i in range(len(data[0]))]
+    #max_bucket = [-1000000000 for i in range(len(data[0]))]
     
     # working on temp data
     temp_data = data.copy()
 
+
+    length = len(temp_data[0])
+    for i in range(length):
+        col_data = temp_data[:,i]
+        _max = np.max(col_data)
+        _min = np.min(col_data)
+
+        # applying min-max normalization
+        col_data = (col_data-_min)/(_max-_min)
+        
+        # replace data
+        temp_data[:,i] = col_data
+    
+
+    """
     # finding maximum
     for row in temp_data:
         for index in range(len(row)):
@@ -45,7 +61,7 @@ def min_max_normalization(data):
             column = row[col_index]
             normalized_value = (column - min_bucket[col_index]) / (max_bucket[col_index] - min_bucket[col_index])
             temp_data[row_index][col_index] = normalized_value
-
+    """
     return temp_data
 
 def k_fold_cross_validation_split(X, k=5):
