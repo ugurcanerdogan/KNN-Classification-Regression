@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from Knn import KNN
+from WeightedKnn import WeightedKNN
 from utils import *
 from tqdm import tqdm
 
@@ -51,7 +52,8 @@ def main():
     splitted = k_fold_cross_validation_split(data, 5)
     #print(splitted.shape)
 
-    knn = KNN(k=7)
+    #knn = KNN(k=7)
+    knn = WeightedKNN(k=7)
 
     accuracies, mean_acc = cross_validation(splitted, knn)
     #print(mean_acc)
