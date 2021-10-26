@@ -1,6 +1,8 @@
+from numpy import maximum
 from utils import *
 from collections import defaultdict, Counter
 
+import sys
 
 class WeightedKNN:
 
@@ -13,24 +15,32 @@ class WeightedKNN:
         self.X_train = X
         self.y_train = y
 
-    def vote(self, neighbours, weight_dict):
+    def vote(self, neighbours, frequence_array):
         distances = []
         classes = []
         indexes = []
+        weights = []
 
         for neighbour in neighbours:
-            index = neighbour[1]
-
-            _class = self.y_train[index]
+            _index = neighbour[1]
+            _class = self.y_train[_index]
             _distance = neighbour[0]
+            _weight = 1 if _distance == 0 else (1/_distance)
 
             distances.append(_distance)
             classes.append(_class)
-            indexes.append(index)
+            indexes.append(_index)
+            weights.append(_weight)
+
+        # just for convention
+        counted = frequence_array 
 
 
         # print("-----voting part-----")
-        counted = list(Counter(classes).items())
+        
+        # old code
+        #counted = list(Counter(classes).items())
+        
         # print(classes)
         # print(counted)
         # print("distances: ", distances)
@@ -126,11 +136,35 @@ class WeightedKNN:
 
         ## ADDED WEIGHT DICTIONARY HERE
 
-        weight_dict = {1.0: 0, 2.0: 0, 3.0: 0, 4.0: 0, 5.0: 0, 6.0: 0, 7.0: 0}
+        
+        
+        # finding maximum class number to decide weight_dict size
+        maximum_class = int(np.max([self.y_train[i[1]] for i in sorted_array[:self.k]]))
+        
+        weight_dict = {(i+1):0 for i in range(maximum_class+1)} 
+
         for _tuple in range(self.k):
             neighb_val = self.y_train[sorted_array[_tuple][1]]
             if not sorted_array[_tuple][0] == 0:
                 weight_dict[neighb_val] += (1 / sorted_array[_tuple][0])
+            else:
+                # if distance value equals to 0, weight value becomes 1 to avoid zero division error
+                weight_dict[neighb_val] += 1
+        
+        # equivalent of Counter() method output from collections which has used on basic KNN
+        """
+        frequence_array = [
+            (class1, weight1), 
+            (class2, weight2),
+            (..., ...),
+            ...
+        ]
+        """
+        frequence_array = [(_class, weight_dict[_class]) for _class in weight_dict.keys()]
+        frequence_array = sorted(frequence_array, key=lambda x:x[1], reverse=True)
 
-        predicted = self.vote(sorted_array[:self.k], weight_dict)
+        # print(frequence_array)
+        
+        # print(sorted_array[:self.k])
+        predicted = self.vote(sorted_array[:self.k], frequence_array)
         return predicted
