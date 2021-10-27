@@ -1,7 +1,6 @@
 from math import sqrt
 
 import numpy as np
-from tqdm import tqdm
 
 
 def euclidean_distance(first_row, second_row):
