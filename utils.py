@@ -60,7 +60,7 @@ def cross_validation(splitted_data, knn, normalize, classification):
     accuracies = []
     mae_values = []
 
-    for data in tqdm(splitted_data):
+    for data in splitted_data:
         sample_train = data[0]
         sample_test = data[1]
 
