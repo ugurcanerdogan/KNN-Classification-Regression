@@ -41,6 +41,7 @@ def cross_validation(splitted_data, knn, normalize, classification):
         # fitting data
         knn.fit(X_train, y_train)
 
+        # prediction part
         predictions = knn.predict(X_test)
 
         #print(knn.y_train)
@@ -74,9 +75,12 @@ def main():
     data = pd.read_csv("glass.csv")
 
     data = np.array(data)
+
+    # 5 fold cross validation
     splitted = k_fold_cross_validation_split(data, 5)
     #print(splitted.shape)
 
+    # k = 7
     knn1 = KNN(k=7)
     knn = WeightedKNN(k=7)
 
