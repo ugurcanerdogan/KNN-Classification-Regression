@@ -19,6 +19,13 @@ def accuracy_score(predicted, labels):
     accuracy = (predicted == labels).sum() / len(predicted)
     #print(accuracy*100)
     return accuracy*100
+
+def mean_absolute_error(predicted, labels):
+    predicted = np.array(predicted)
+    labels = np.array(labels) 
+    
+    mae = np.absolute(labels-predicted).sum() / len(predicted)
+    return mae
 def min_max_normalization(data):
     #max_bucket = [-1000000000 for i in range(len(data[0]))]
     
@@ -66,8 +73,6 @@ def min_max_normalization(data):
 
 def k_fold_cross_validation_split(X, k=5):
     # takes numpy array as an argument
-   
-
     # shuffle
     np.random.shuffle(X)
     

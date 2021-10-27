@@ -1,4 +1,3 @@
-from numpy import maximum
 from utils import *
 from collections import defaultdict, Counter
 
