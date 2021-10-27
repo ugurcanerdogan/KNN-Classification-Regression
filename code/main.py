@@ -1,6 +1,7 @@
 import sys
 
 import pandas as pd
+from tqdm import tqdm
 
 from Knn import KNN
 from KnnRegression import KNNRegression
