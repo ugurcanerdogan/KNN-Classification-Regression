@@ -103,9 +103,9 @@ def cross_validation(splitted_data, knn, normalize, classification):
 
     if classification:
         accuracies = np.array(accuracies)
-        return np.sort(accuracies), np.mean(accuracies)
+        return np.sort(accuracies)
     else:
-        return np.sort(mae_values), np.mean(mae_values)
+        return np.sort(mae_values)
 
 
 def k_fold_cross_validation_split(X, k=5):
