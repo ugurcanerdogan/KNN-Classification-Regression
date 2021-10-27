@@ -1,6 +1,7 @@
-import sys
-import numpy as np
 from math import sqrt
+
+import numpy as np
+from tqdm import tqdm
 
 
 def euclidean_distance(first_row, second_row):
@@ -20,15 +21,18 @@ def accuracy_score(predicted, labels):
 
     # Comparison between predictions and the test labels.
     accuracy = (predicted == labels).sum() / len(predicted)
-    #print(accuracy*100)
-    return accuracy*100
+    # print(accuracy*100)
+    return accuracy * 100
+
 
 def mean_absolute_error(predicted, labels):
     predicted = np.array(predicted)
-    labels = np.array(labels) 
-    
-    mae = np.absolute(labels-predicted).sum() / len(predicted)
+    labels = np.array(labels)
+
+    mae = np.absolute(labels - predicted).sum() / len(predicted)
     return mae
+
+
 def min_max_normalization(data):
     # max_bucket = [-1000000000 for i in range(len(data[0]))]
 
@@ -49,30 +53,59 @@ def min_max_normalization(data):
         # replace data
         temp_data[:, i] = col_data
 
-    """
-    # finding maximum
-    for row in temp_data:
-        for index in range(len(row)):
-            column = row[index]
-            if column > max_bucket[index]:
-                max_bucket[index] = column
-
-    # finding minimum
-    min_bucket = max_bucket.copy()
-    for row in temp_data:
-        for index in range(len(row)):
-            column = row[index]
-            if column < min_bucket[index]:
-                min_bucket[index] = column
-
-    # normalization part
-    for row_index, row in enumerate(temp_data):
-        for col_index in range(len(row)):
-            column = row[col_index]
-            normalized_value = (column - min_bucket[col_index]) / (max_bucket[col_index] - min_bucket[col_index])
-            temp_data[row_index][col_index] = normalized_value
-    """
     return temp_data
+
+
+def cross_validation(splitted_data, knn, normalize, classification):
+    accuracies = []
+    mae_values = []
+
+    for data in tqdm(splitted_data):
+        sample_train = data[0]
+        sample_test = data[1]
+
+        # print(sample_train.shape)
+        # print(sample_test.shape)
+
+        # train and test sets
+        X_train = sample_train[:, :-1]
+        y_train = sample_train[:, -1]
+
+        X_test = sample_test[:, :-1]
+        y_test = sample_test[:, -1]
+
+        if normalize:
+            """
+                Applying min-max normalization to data
+
+                Applying separately to avoid data leakage
+            """
+            X_train = min_max_normalization(X_train)
+            X_test = min_max_normalization(X_test)
+
+        # fitting data
+        knn.fit(X_train, y_train)
+
+        # prediction part
+        predictions = knn.predict(X_test)
+
+        # print(knn.y_train)
+        # print(predictions)
+        # print(y_test)
+
+        if classification:
+            # calculate accuracy
+            accuracy = accuracy_score(predictions, y_test)
+            accuracies.append(accuracy)
+        else:
+            mae = mean_absolute_error(predictions, y_test)
+            mae_values.append(mae)
+
+    if classification:
+        accuracies = np.array(accuracies)
+        return np.sort(accuracies), np.mean(accuracies)
+    else:
+        return np.sort(mae_values), np.mean(mae_values)
 
 
 def k_fold_cross_validation_split(X, k=5):

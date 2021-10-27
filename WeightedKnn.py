@@ -1,18 +1,12 @@
+from KnnBase import KnnBase
 from utils import *
-from collections import defaultdict, Counter
 
-import sys
 
-class WeightedKNN:
+class WeightedKNN(KnnBase):
 
     # setting k value of KNN algorithm
     def __init__(self, k=3):
-        self.k = k
-
-    # setting attribute and class data
-    def fit(self, X, y):
-        self.X_train = X
-        self.y_train = y
+        super().__init__(k)
 
     # majority voting function
     def vote(self, neighbours, frequence_array):
@@ -22,12 +16,12 @@ class WeightedKNN:
         weights = []
 
         for neighbour in neighbours:
-            _index = neighbour[1]    # neighbour[1] : index of related data's row
-                                     # recall --> [dist, index_of_neighbour]
+            _index = neighbour[1]  # neighbour[1] : index of related data's row
+            # recall --> [dist, index_of_neighbour]
 
-            _class = self.y_train[_index]    # _ class : corresponding data in the Class set
-            _distance = neighbour[0]         # neighbour[0] : distance of related data
-            _weight = 1 if _distance == 0 else (1/_distance)
+            _class = self.y_train[_index]  # _ class : corresponding data in the Class set
+            _distance = neighbour[0]  # neighbour[0] : distance of related data
+            _weight = 1 if _distance == 0 else (1 / _distance)
 
             # save all information in various lists
             distances.append(_distance)
@@ -36,23 +30,22 @@ class WeightedKNN:
             weights.append(_weight)
 
         # just for convention
-        counted = frequence_array 
-
+        counted = frequence_array
 
         # print("-----voting part-----")
-        
+
         # old code
-        #counted = list(Counter(classes).items())
-        
+        # counted = list(Counter(classes).items())
+
         # print(classes)
         # print(counted)
         # print("distances: ", distances)
 
-        most_common = counted[0]                    # find the most repetitive class
-        class_numbers = [i[1] for i in counted]     # store the number of repetitions of classes
+        most_common = counted[0]  # find the most repetitive class
+        class_numbers = [i[1] for i in counted]  # store the number of repetitions of classes
         # print(class_numbers)
 
-        if class_numbers.count(most_common[0]) > 1: # if the most common class has more than one sample
+        if class_numbers.count(most_common[0]) > 1:  # if the most common class has more than one sample
 
             # x = input("tie found, press any key to continue")
 
@@ -87,7 +80,6 @@ class WeightedKNN:
             new_distances = np.array(new_distances)
             # print(new_distances)
 
-
             sorted_indices = np.argsort(new_distances)
             # print(sorted_indices)
 
@@ -110,10 +102,6 @@ class WeightedKNN:
             predicted_class = int(most_common[0])
 
         return predicted_class
-
-    def predict(self, X):
-        predicted_classes = [self.predict_helper(row) for row in X]
-        return predicted_classes
 
     def predict_helper(self, x):
         """
@@ -138,14 +126,10 @@ class WeightedKNN:
             index = sorted_array[m][1]
             # print(self.X_train[index], ", class: " ,self.y_train[index])
 
-        ## ADDED WEIGHT DICTIONARY HERE
-
-        
-        
         # finding maximum class number to decide weight_dict size
         maximum_class = int(np.max([self.y_train[i[1]] for i in sorted_array[:self.k]]))
-        
-        weight_dict = {(i+1):0 for i in range(maximum_class+1)} 
+
+        weight_dict = {(i + 1): 0 for i in range(maximum_class + 1)}
 
         for _tuple in range(self.k):
             neighb_val = self.y_train[sorted_array[_tuple][1]]
@@ -156,7 +140,7 @@ class WeightedKNN:
                 print(sorted_array[_tuple][0])
                 # if distance value equals to 0, weight value becomes 1 to avoid zero division error
                 weight_dict[neighb_val] += 1
-        
+
         # equivalent of Counter() method output from collections which has used on basic KNN
         """
         frequence_array = [
@@ -167,10 +151,10 @@ class WeightedKNN:
         ]
         """
         frequence_array = [(_class, weight_dict[_class]) for _class in weight_dict.keys()]
-        frequence_array = sorted(frequence_array, key=lambda x:x[1], reverse=True)
+        frequence_array = sorted(frequence_array, key=lambda x: x[1], reverse=True)
 
         # print(frequence_array)
-        
+
         # print(sorted_array[:self.k])
         predicted = self.vote(sorted_array[:self.k], frequence_array)
         return predicted
