@@ -6,15 +6,16 @@ import sys
 
 class WeightedKNN:
 
+    # setting k value of KNN algorithm
     def __init__(self, k=3):
-        # partition sayısı seç
         self.k = k
 
+    # setting attribute and class data
     def fit(self, X, y):
-        # trainin datasını ve class numunu seç
         self.X_train = X
         self.y_train = y
 
+    # majority voting function
     def vote(self, neighbours, frequence_array):
         distances = []
         classes = []
@@ -22,11 +23,14 @@ class WeightedKNN:
         weights = []
 
         for neighbour in neighbours:
-            _index = neighbour[1]
-            _class = self.y_train[_index]
-            _distance = neighbour[0]
+            _index = neighbour[1]    # neighbour[1] : index of related data's row
+                                     # recall --> [dist, index_of_neighbour]
+
+            _class = self.y_train[_index]    # _ class : corresponding data in the Class set
+            _distance = neighbour[0]         # neighbour[0] : distance of related data
             _weight = 1 if _distance == 0 else (1/_distance)
 
+            # save all information in various lists
             distances.append(_distance)
             classes.append(_class)
             indexes.append(_index)
@@ -45,13 +49,14 @@ class WeightedKNN:
         # print(counted)
         # print("distances: ", distances)
 
-        most_common = counted[0]
-        class_numbers = [i[1] for i in counted]
+        most_common = counted[0]                    # find the most repetitive class
+        class_numbers = [i[1] for i in counted]     # store the number of repetitions of classes
         # print(class_numbers)
 
-        predicted_class = None
-        if class_numbers.count(most_common[0]) > 1:
+        if class_numbers.count(most_common[0]) > 1: # if the most common class has more than one sample
+
             # x = input("tie found, press any key to continue")
+
             # that means we have a tie situation
             classes_of_duplicate_occurrences = []
             for cnt in counted:
@@ -67,10 +72,10 @@ class WeightedKNN:
             for _class in classes_of_duplicate_occurrences:
                 for __index, __class in enumerate(classes):
                     if _class == __class:
-                        # accessing distance of neighbour from the array which is created above
+                        # access distance of neighbour from the array which is created above
                         indiv_distance = distances[__index]
 
-                        # storing distances to calculate sums later and decide nearest neighbour
+                        # store distances to calculate sums later and decide nearest neighbour
                         new_distances[int(_class)].append(indiv_distance)
 
             # print(new_distances)
@@ -145,9 +150,11 @@ class WeightedKNN:
 
         for _tuple in range(self.k):
             neighb_val = self.y_train[sorted_array[_tuple][1]]
+            # print(sorted_array[_tuple][0])
             if not sorted_array[_tuple][0] == 0:
                 weight_dict[neighb_val] += (1 / sorted_array[_tuple][0])
             else:
+                print(sorted_array[_tuple][0])
                 # if distance value equals to 0, weight value becomes 1 to avoid zero division error
                 weight_dict[neighb_val] += 1
         

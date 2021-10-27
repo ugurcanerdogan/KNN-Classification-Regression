@@ -11,7 +11,8 @@ from tqdm import tqdm
 
 def cross_validation(splitted_data, knn, normalize):
     accuracies = []
-    for data in tqdm(splitted_data):
+    #for data in tqdm(splitted_data):
+    for data in splitted_data:
         sample_train = data[0]
         sample_test  = data[1]
 
@@ -37,6 +38,7 @@ def cross_validation(splitted_data, knn, normalize):
         # fitting data
         knn.fit(X_train, y_train)
 
+        # prediction part
         predictions = knn.predict(X_test)
 
         #print(knn.y_train)
@@ -54,14 +56,17 @@ def cross_validation(splitted_data, knn, normalize):
 
 def main():
     # defining random seed to get same random results every time
-    np.random.seed(12345)
+    # np.random.seed(12345)
 
     data = pd.read_csv("glass.csv")
 
     data = np.array(data)
+
+    # 5 fold cross validation
     splitted = k_fold_cross_validation_split(data, 5)
     #print(splitted.shape)
 
+    # k = 7
     knn1 = KNN(k=7)
     knn = WeightedKNN(k=7)
 
@@ -74,4 +79,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    for i in range(1000):
+        main()

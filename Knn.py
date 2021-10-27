@@ -1,52 +1,59 @@
 from utils import *
 from collections import defaultdict, Counter
 
-
 class KNN:
 
+    # setting k value of KNN algorithm
     def __init__(self, k=3):
         self.k = k
 
+    # setting attribute and class data
     def fit(self, X, y):
         self.X_train = X
         self.y_train = y
 
+    # majority voting function
     def vote(self, neighbours):
         distances = []
         classes = []
         indexes = []
-        
-        for neighbour in neighbours:
-            index = neighbour[1]
-            
-            _class = self.y_train[index]
-            _distance = neighbour[0]
 
+
+        for neighbour in neighbours:
+            index = neighbour[1]    # neighbour[1] : index of related data's row
+                                    # recall --> [dist, index_of_neighbour]
+            
+            _class = self.y_train[index]    # _ class : corresponding data in the Class set
+            _distance = neighbour[0]        # neighbour[0] : distance of related data
+
+
+            # save all information in various lists
             distances.append(_distance)
             classes.append(_class)
             indexes.append(index)
         
         
         #print("-----voting part-----")
-        counted = list(Counter(classes).items())
+        counted = list(Counter(classes).items())    # numerical grouping by class of each data
         #print(classes)
         #print(counted)
         #print("distances: ", distances)
 
       
-        most_common = counted[0]
-        class_numbers = [i[1] for i in counted]
+        most_common = counted[0]                    # find the most repetitive class
+        class_numbers = [i[1] for i in counted]     # store the number of repetitions of classes
         #print(class_numbers)
-        
-        predicted_class = None
-        if class_numbers.count(most_common[0]) > 1:
+
+        if class_numbers.count(most_common[0]) > 1: # if the most common class has more than one sample
+
             #x = input("tie found, press any key to continue")
-            # that means we have a tie situation
+
+            # that means we have a tie situation..
             classes_of_duplicate_occurrences = []
             for cnt in counted:
                 if cnt[1] == most_common[1]:
                     # the one that we are looking for
-                    classes_of_duplicate_occurrences.append(cnt[0])
+                    classes_of_duplicate_occurrences.append(cnt[0]) # find the classes of the data that provide the tie situation
             
             #print(classes_of_duplicate_occurrences)
             
@@ -57,10 +64,10 @@ class KNN:
             for _class in classes_of_duplicate_occurrences:
                 for __index, __class in enumerate(classes):
                     if _class == __class:
-                        # accessing distance of neighbour from the array which is created above
+                        # access distance of neighbour from the array which is created above
                         indiv_distance = distances[__index]
                         
-                        # storing distances to calculate sums later and decide nearest neighbour
+                        # store distances to calculate sums later and decide nearest neighbour
                         new_distances[int(_class)].append(indiv_distance)
 
             #print(new_distances)
