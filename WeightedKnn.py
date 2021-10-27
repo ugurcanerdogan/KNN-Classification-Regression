@@ -137,7 +137,6 @@ class WeightedKNN(KnnBase):
             if not sorted_array[_tuple][0] == 0:
                 weight_dict[neighb_val] += (1 / sorted_array[_tuple][0])
             else:
-                print(sorted_array[_tuple][0])
                 # if distance value equals to 0, weight value becomes 1 to avoid zero division error
                 weight_dict[neighb_val] += 1
 
