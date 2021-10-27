@@ -1,7 +1,8 @@
 from math import sqrt
 
 import numpy as np
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 def euclidean_distance(first_row, second_row):
     if len(first_row) != len(second_row):
@@ -102,9 +103,21 @@ def cross_validation(splitted_data, knn, normalize, classification):
 
     if classification:
         accuracies = np.array(accuracies)
-        return np.sort(accuracies)
+        return np.sort(accuracies),np.mean(accuracies)
     else:
-        return np.sort(mae_values)
+        return np.sort(mae_values),np.mean(mae_values)
+
+
+def plot_k_values(arr1):
+
+    x = np.array([1, 3, 5, 7, 9])
+    plt.plot(x,arr1,marker = 'o')
+
+    plt.title("KNN")
+    plt.xlabel("K values")
+    plt.ylabel("Accuracies")
+
+    plt.show()
 
 
 def k_fold_cross_validation_split(X, k=5):
