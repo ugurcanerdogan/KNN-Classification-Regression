@@ -1,8 +1,8 @@
 from math import sqrt
 
-import numpy as np
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 def euclidean_distance(first_row, second_row):
     if len(first_row) != len(second_row):
@@ -103,19 +103,28 @@ def cross_validation(splitted_data, knn, normalize, classification):
 
     if classification:
         accuracies = np.array(accuracies)
-        return np.sort(accuracies),np.mean(accuracies)
+        return np.sort(accuracies), np.mean(accuracies)
     else:
-        return np.sort(mae_values),np.mean(mae_values)
+        return np.sort(mae_values), np.mean(mae_values)
 
 
-def plot_k_values(arr1):
+def plot_k_values_and_accuracies(title1, title2, arr1, arr2, fontSize, isAcc=True):
+    x = np.array(["1", "3", "5", "7", "9"])
+    plt.subplot(1, 2, 1)
+    plt.subplots_adjust(wspace=0.4)
+    plt.plot(x, arr1, marker='o')
 
-    x = np.array([1, 3, 5, 7, 9])
-    plt.plot(x,arr1,marker = 'o')
-
-    plt.title("KNN")
+    plt.title(title1, fontdict=fontSize)
     plt.xlabel("K values")
-    plt.ylabel("Accuracies")
+
+    plt.ylabel("Accuracies" if isAcc else "Mean MAE")
+
+    plt.subplot(1, 2, 2)
+    plt.plot(x, arr2, marker='o')
+
+    plt.title(title2, fontdict=fontSize)
+    plt.xlabel("K values")
+    plt.ylabel("Accuracies" if isAcc else "Mean MAE")
 
     plt.show()
 
