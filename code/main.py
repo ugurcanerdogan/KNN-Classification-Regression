@@ -14,14 +14,14 @@ def generalTest():
     sys.stdout = results_txt
 
     # classification part
-    classification_data = pd.read_csv("glass.csv")
+    classification_data = pd.read_csv("../glass.csv")
     classification_data = np.array(classification_data)
 
     # 5 fold cross validation
     splitted = k_fold_cross_validation_split(classification_data, 5)
 
     # regression part
-    regression_data = pd.read_csv("Concrete_Data_Yeh.csv")
+    regression_data = pd.read_csv("../Concrete_Data_Yeh.csv")
     regression_data = np.array(regression_data)
 
     # 5 fold cross validation
