@@ -114,11 +114,5 @@ class KNN(KnnBase):
         sorted_array = sorted(distances, key=lambda x: x[0])
         # print(sorted_array)
 
-        # print("Asked data: ", x.astype(int))
-        # print("Nearest Neighbours:")
-        for m in range(self.k):
-            index = sorted_array[m][1]
-            # print(self.X_train[index], ", class: " ,self.y_train[index])
-
         predicted = self.vote(sorted_array[:self.k])
         return predicted

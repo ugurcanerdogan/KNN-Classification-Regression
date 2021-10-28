@@ -16,14 +16,14 @@ def generalTest():
     sys.stdout = results_txt
 
     # classification part
-    classification_data = pd.read_csv("../glass.csv")
+    classification_data = pd.read_csv("glass.csv")
     classification_data = np.array(classification_data)
 
     # 5 fold cross validation
     splitted = k_fold_cross_validation_split(classification_data, 5)
 
     # regression part
-    regression_data = pd.read_csv("../Concrete_Data_Yeh.csv")
+    regression_data = pd.read_csv("Concrete_Data_Yeh.csv")
     regression_data = np.array(regression_data)
 
     # 5 fold cross validation
@@ -48,8 +48,7 @@ def generalTest():
             for bool in [True, False]:
                 text = "With" if bool else "Without"
                 print("*********************************")
-                print(f"{text} Normalization")
-                print(f"With k={k_val}")
+                print(f"{text} Normalization, k={k_val}")
 
                 print("Classification Part")
                 knn = KNN(k=k_val)
@@ -90,7 +89,7 @@ def generalTest():
                                      k_list_withoutWeight_MAE, k_list_withWeight_MAE, {'size': 10}, isAcc=False)
         plot_k_values_and_accuracies("KNN Regression without weights (non normalized)",
                                      "KNN Regression with weights (non normalized)",
-                                     k_list_withoutWeight_nonNormalized_MAE, k_list_withoutWeight_nonNormalized_MAE,
+                                     k_list_withoutWeight_nonNormalized_MAE, k_list_withWeight_nonNormalized_MAE,
                                      {'size': 7}, isAcc=False)
 
     results_txt.close()
